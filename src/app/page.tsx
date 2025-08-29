@@ -1,7 +1,7 @@
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      Home
+    <div className="h-[calc(100%-45px)] w-full flex flex-col justify-center">
+      <h2 className="w-full text-center text-5xl">Home</h2>
     </div>
   );
 }

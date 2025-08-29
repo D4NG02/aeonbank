@@ -1,8 +1,21 @@
+import { twMerge } from "tailwind-merge";
+import LoginForm from "./LoginForm";
 
 export default function Login() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      Login
+    <div
+      className={twMerge(
+        "h-[calc(100%-45px)]",
+        "flex flex-col gap-3 justify-center",
+        "p-5 mx-auto max-w-sm",
+      )}
+    >
+      <div className={twMerge("rounded-xl border border-gray-200",
+        "p-3 shadow-md",)}>
+        <h2 className="mb-5 text-center text-2xl">Login</h2>
+        <LoginForm />
+      </div>
     </div>
   );
 }
+

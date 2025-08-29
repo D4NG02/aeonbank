@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Navbar from "./components/Navbar";
 import { twMerge } from "tailwind-merge";
+import Navbar from "./components/Navbar";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +30,7 @@ export default function RootLayout({
         className={twMerge(
           geistSans.variable,
           geistMono.variable,
-          "antialiased text-gray-900 bg-gray-50",
+          "h-screen antialiased text-gray-900 bg-gray-50",
         )}
       >
         <Navbar />
