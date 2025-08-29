@@ -6,13 +6,15 @@ import { createPortal } from "react-dom";
 import { twMerge } from "tailwind-merge";
 import { motion as M } from "motion/react";
 import { Menu, Search, X } from "lucide-react";
+import { useStateProvider } from "../utils/Reducer/StateProvider";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const [isMenu, setIsMenu] = useState<boolean>(false);
 
   return (
     <>
-      <nav className={twMerge("py-1.5 border-b text-lg","px-5 md:px-10")}>
+      <nav className={twMerge("py-1.5 border-b text-lg", "px-5 md:px-10")}>
         {/* Mobile */}
         <div
           className={twMerge(
@@ -90,29 +92,33 @@ const Navbar = () => {
 export default Navbar;
 
 const Links = ({ onClose }: { onClose: () => void }) => {
+  const currentPathname = usePathname();
+  const { state } = useStateProvider()
+  const { login } = state
+
   return (
     <>
-      <Link href="/" onClick={onClose}>
+      <Link href="/showcase" onClick={onClose}>
         Showcase
       </Link>
-      <Link href="/" onClick={onClose}>
+      <Link href="/docs" onClick={onClose}>
         Docs
       </Link>
-      <Link href="/" onClick={onClose}>
+      <Link href="/blog" onClick={onClose}>
         Blog
       </Link>
-      <Link href="/" onClick={onClose}>
+      <Link href="/analytics" onClick={onClose}>
         Analytics
       </Link>
-      <Link href="/" onClick={onClose}>
+      <Link href="/templates" onClick={onClose}>
         Templates
       </Link>
-      <Link href="/" onClick={onClose}>
+      <Link href="/enterprise" onClick={onClose}>
         Enterprise
       </Link>
-      <Link href="/login" onClick={onClose}>
+      {!login.success ? <Link href="/login" onClick={onClose}>
         Login
-      </Link>
+      </Link> : <></>}
     </>
   );
 };
