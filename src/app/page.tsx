@@ -2,7 +2,7 @@ import { twMerge } from "tailwind-merge"
 
 export default function Home() {
   return (
-    <div className={twMerge("h-[calc(100%-48px)] w-full flex flex-col justify-center","p-5 md:px-10")}>
+    <div className={twMerge("h-[calc(100%-50px)] w-full flex flex-col justify-center","p-5 md:px-10")}>
       <h2 className="w-full text-center text-5xl">Home</h2>
     </div>
   );
