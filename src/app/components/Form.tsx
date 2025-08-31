@@ -48,7 +48,7 @@ interface InputProps extends HTMLAttributes<HTMLInputElement> {
 const Input = ({ type, name, ...rest }: InputProps) => {
   return (
     <div className="w-full flex flex-col gap-1">
-      <label htmlFor={name} className="text-lg capitalize">
+      <label htmlFor={name} className="capitalize">
         {name}
       </label>
       <input
@@ -67,25 +67,5 @@ const Input = ({ type, name, ...rest }: InputProps) => {
   );
 };
 
-interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
-  color: "primary" | "secondary";
-  type: "button" | "submit" | "reset";
-}
-const Button = ({ children, color = "primary", ...rest }: ButtonProps) => {
-  return (
-    <button
-      className={twMerge(
-        "px-3 py-1 rounded-xl",
-        color ? "bg-purple-300" : "bg-gray-400",
-      )}
-      {...rest}
-    >
-      {children}
-    </button>
-  );
-};
-
 Form.Input = Input;
-Form.Button = Button;
 export default Form;

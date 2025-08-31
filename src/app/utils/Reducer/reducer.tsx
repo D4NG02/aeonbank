@@ -1,12 +1,12 @@
 import { reducerCases } from "./Constant"
 
 export interface stateType {
-    login: { success: boolean, message: string },
+    login: { success: boolean, message: string, token: string },
 }
 export interface actionType { type: string, payload: any }
 
 export const state: stateType = {
-    login: { success: false, message: "Not login" },
+    login: { success: false, message: "Not login", token: "" },
 }
 
 const reducer = (state: stateType, action: actionType) => {
