@@ -72,6 +72,7 @@ const Transactions = () => {
         {transactions.length > 0 &&
           transactions.map((trans, idx) => {
             const date = DateFormat(new Date(trans.date));
+            const currencyFormatterMYR = new Intl.NumberFormat('en-MY', { style: 'currency', currency: 'MYR' });
             return (
               <tr
                 key={`transaction-${idx}`}
@@ -89,7 +90,7 @@ const Transactions = () => {
                 </td>
                 <td>{trans.type}</td>
                 <td className="text-right">
-                  {"RM" + trans.amount.toLocaleString()}
+                  {currencyFormatterMYR.format(trans.amount)}
                 </td>
               </tr>
             );
