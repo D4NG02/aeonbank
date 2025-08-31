@@ -1,13 +1,15 @@
 "use client";
 
 import { ChangeEvent, FormEvent, useState } from "react";
+import { motion as M } from "motion/react";
 import { redirect } from "next/navigation";
 import Form from "../components/Form";
 import encrypt from "../utils/encrypt";
 import { useStateProvider } from "../utils/Reducer/StateProvider";
 import { reducerCases } from "../utils/Reducer/Constant";
+import Button from "../components/Button";
 
-type LoginType = { success: boolean; message: string };
+type LoginType = { success: boolean; message: string, token: string };
 
 const LoginForm = () => {
   const { dispatch } = useStateProvider();
@@ -16,6 +18,7 @@ const LoginForm = () => {
   const [isLogin, setIsLogin] = useState<LoginType>({
     success: false,
     message: "Not login",
+    token: "Not login",
   });
   const [step, setStep] = useState<"username" | "secure" | "submit">(
     "username",
@@ -45,7 +48,7 @@ const LoginForm = () => {
 
   async function onLogin(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsLogin({ success: false, message: "Login..." });
+    setIsLogin({ success: false, message: "Login...", token: "" });
 
     try {
       const hashPassword = await encrypt(inputData.password);
@@ -55,11 +58,12 @@ const LoginForm = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch secure word");
+        throw new Error("Failed to login");
       }
 
-      const data: { success: boolean; message: string } = await response.json();
-      if (data) {
+      const data: { success: boolean; message: string, token: string } = await response.json();
+      if (data.success) {
+        console.log(data)
         setIsLogin(data);
         dispatch({
           type: reducerCases.SET_LOGIN,
@@ -71,15 +75,14 @@ const LoginForm = () => {
         }, 3000);
       }
     } catch (error) {
-      console.error("Fetch error:", error);
-      setSecureWord("Error fetching word.");
+      console.error("Login error:", error);
     }
   }
 
   return (
     <>
       {/* Submit username */}
-      {step == "username" ? (
+      {step.includes("username") ? (
         <Form onSubmit={onSubmit}>
           <Form.Input
             type="text"
@@ -92,16 +95,16 @@ const LoginForm = () => {
             }
           />
 
-          <Form.Button type="submit" color="primary">
+          <Button type="submit" variant="contained">
             Submit
-          </Form.Button>
+          </Button>
         </Form>
       ) : (
         <></>
       )}
 
       {/* Pop password input */}
-      {step == "secure" ? (
+      {step.includes("secure") ? (
         <Form>
           <span className="w-full">Your secure work: {secureWord}</span>
 
@@ -116,55 +119,62 @@ const LoginForm = () => {
             }
           />
 
-          <Form.Button
+          <Button
             type="button"
-            color="primary"
+            variant="contained"
             onClick={() => setStep("submit")}
           >
             Next
-          </Form.Button>
+          </Button>
         </Form>
       ) : (
         <></>
       )}
 
       {/* Login */}
-      {step == "submit" ? (
-        <Form onSubmit={onLogin}>
-          <span className="w-full">Your secure work: {secureWord}</span>
+      {step.includes("submit") ? (
+        <>
+          <p className="mb-0.5">Your secure work: {secureWord}</p>
           {isLogin.success ? (
-            <span className="mr-auto px-2 py-1 rounded-lg bg-green-300">
-              {isLogin.message}
-            </span>
+            <div className="mb-3">
+              <p>{isLogin.message}</p>
+              <M.p
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 3 }}
+                className="border-b-2 border-green-300"
+              />
+            </div>
           ) : (
             <></>
           )}
+          <Form onSubmit={onLogin}>
+            <Form.Input
+              type="text"
+              name="username"
+              value={inputData.username}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setInputData((prev) => {
+                  return { ...prev, username: e.target.value };
+                })
+              }
+            />
+            <Form.Input
+              type="password"
+              name="password"
+              value={inputData.password}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setInputData((prev) => {
+                  return { ...prev, password: e.target.value };
+                })
+              }
+            />
 
-          <Form.Input
-            type="text"
-            name="username"
-            value={inputData.username}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setInputData((prev) => {
-                return { ...prev, username: e.target.value };
-              })
-            }
-          />
-          <Form.Input
-            type="password"
-            name="password"
-            value={inputData.password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setInputData((prev) => {
-                return { ...prev, password: e.target.value };
-              })
-            }
-          />
-
-          <Form.Button type="submit" color="primary">
-            {isLogin.message.includes("Login...") ? "Login..." : "Login"}
-          </Form.Button>
-        </Form>
+            <Button type="submit" variant="contained">
+              {isLogin.message.includes("Login...") ? "Login..." : "Login"}
+            </Button>
+          </Form>
+        </>
       ) : (
         <></>
       )}

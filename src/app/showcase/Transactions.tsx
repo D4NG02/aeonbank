@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion as M } from "motion/react";
 import { twMerge } from "tailwind-merge";
 
 type TransactionType = {
-  date: Date;
+  date: string;
   id: string;
   to: string;
   type: string;
@@ -39,21 +40,27 @@ const Transactions = () => {
 
       const data: TransactionType[] = await response.json();
       if (data) {
-        console.log(data);
         setTransactions(data);
       }
     } catch (error) {}
   };
 
   return (
-    <table className={twMerge("w-full table-fixed",
+    <M.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeInOut" }}
+    >
+    <table
+      className={twMerge(
+        "w-full table-fixed",
         "[&_th]:py-1 [&_th]:px-3 [&_th]:truncate",
         "[&_td]:py-1 [&_td]:px-3 [&_td]:truncate",
-    )}>
+        "[&_p]:truncate",
+      )}
+    >
       <thead>
-        <tr
-          className="text-left bg-gray-300"
-        >
+        <tr className="text-left bg-gray-300">
           <th>Date</th>
           <th>Reference ID</th>
           <th>To</th>
@@ -89,6 +96,7 @@ const Transactions = () => {
           })}
       </tbody>
     </table>
+    </M.div>
   );
 };
 
