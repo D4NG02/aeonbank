@@ -7,7 +7,7 @@ export default function Login() {
   return (
     <div
       className={twMerge(
-        "h-[calc(100%-48px)]",
+        "h-[calc(100%-50px)]",
         "flex flex-col gap-3 justify-center",
         "p-5 mx-auto max-w-sm",
       )}
